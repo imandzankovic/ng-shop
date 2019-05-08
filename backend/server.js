@@ -60,20 +60,32 @@ app.post('/products', (req, res) => {
 
 app.put('/products/:id', async (req, res, next) => {
 
-    try {
+    // try {
 
-        var query = { id: req.params.id };
-        console.log(query)
-        var product = await Product.findOne(query).exec()
-        //var product = await Product.findOne(request.params.id).exec();
-        product.set(req.body);
-        var result = await product.save();
-        res.status(200).send(result);
-    } catch (error) {
-        res.status(500).send(error);
-        console.log(error)
-    }
-})
+    //     var query = { id: req.params.id };
+    //     console.log(query)
+    //     var product = await Product.findOne(query).exec()
+    //     //var product = await Product.findOne(request.params.id).exec();
+    //     product.set(req.body);
+    //     var result = await product.save();
+    //     res.status(200).send(result);
+    // } catch (error) {
+    //     res.status(500).send(error);
+    //     console.log(error)
+    // }
+    Product
+        .findOneAndUpdate({ id: req.params.id }, req.body)
+        .exec(function (err, product) {
+            product.set(req.body);
+            product.save();
+            console.log(req.body)
+            if (err) return res.status(500).json({ err: err.message })
+            res.json({ product, message: 'Successfully updated' })
+        });
+
+    })
+
+
 
 app.delete('/product/:id',async (req,res)=>{
    
